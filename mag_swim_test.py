@@ -22,7 +22,7 @@ def main():
 	#IMPORTANT
 	#% IF VALUE RETURNED BY FUCKTON IS NEGATIVE MAKE IT POSITIVE 
 	#f2      = 1   #frequency in hz
-	t       = np.arange(0,1,.01) #time
+	t       = np.arange(0,1,.01) # likely ned to increase this range
 	phi     = 0 #phase shift
 
 	final_data = np.array([])
@@ -34,22 +34,22 @@ def main():
     test_hz = [0.25, 0.5, 0.75, 0.85, 0.95, 1.0] # add desired numbers, so far below 1 hz
     test_amp = [10, 15, 20, 25, 30, 35, 40, 45] # add desired numbers, below 50
     for hz in test_hz:
-    	freq_response = np.array([])
-    	plt.figure()
+        freq_response = np.array([])
+        plt.figure()
     	for a in test_amp:
-    		amp_response = np.array([]) 
-    		cos_test = (a*np.cos(2*np.pi*hz*t + phi))
-			for dpoint in len(cos_test):
-				if cos_test[dpoint] > 0:
+    	    amp_response = np.array([]) 
+    	    cos_test = (a*np.cos(2*np.pi*hz*t + phi))
+		    for dpoint in len(cos_test):
+			    if cos_test[dpoint] > 0:
 					# may not be M1, but that can be changed later
 				    rc_single.ForwardM1(address, M1AForward(cos_test[dpoint]))
-				else:
-					rc_single.BackwardM1(address, M1ABackward(cos_test[dpoint]))
+			    else:
+				    rc_single.BackwardM1(address, M1ABackward(cos_test[dpoint]))
 				
                 #TODO read in the magnetometer value(s) i.e. val = magnet.read()
  				#TODO np.append(amp_response, val)
 
- 				time.sleep(sleep_time)
+ 			    time.sleep(sleep_time)
 
  			#draws plot and labels on matplotlib
  			rgb = [np.random.uniform() for i in range(3)]
@@ -62,14 +62,11 @@ def main():
 	    plt.legend()
 	    plt.xlabel("Timestep (seconds)")
 	    plt.ylabel("Magnetic response (units)")
-		final_data = np.column_stack((final_data, freq_response))
+        final_data = np.column_stack((final_data, freq_response))
 	#final dataframe is a (100 * h) x n matrix, where number of frequencies and n is the number of test amplitudes. adds all the frequency responses together. 
-	final_dataframe = pd.Dataframe(final_data)
-	final_dataframe.to_csv("response_vs_freq_per_amp_single_coil.csv")
+    final_dataframe = pd.Dataframe(final_data)
+    final_dataframe.to_csv("response_vs_freq_per_amp_single_coil.csv")
     plt.show()
-
-
-
 
 
 
